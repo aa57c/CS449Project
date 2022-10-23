@@ -1,0 +1,42 @@
+package sprint2_product;
+
+import java.awt.GridLayout;
+
+import javax.swing.*;
+
+public class Interactive_Board {
+	private int[][] grid;
+	private char turn = 'S';
+	
+	
+	public Interactive_Board(/*parameter board size goes here*/) {
+		//grid = new int[board size][board size];
+	}
+	
+	/*
+	public int getCell(int row, int column, board size) {
+		//if (row >= 0 && row < board size && column >= 0 && column < board size)
+			//return grid[row][column];
+		//else
+			//return -1;
+	}
+	*/
+/*
+	public char getTurn() {
+		return turn;
+	}
+	*/
+/*
+	public void makeMove(int row, int column, board size) {
+		if (row >= 0 && row < boardsize && column >= 0 && column < boardsize
+				&& grid[row][column] == 0) {
+			grid[row][column] = (turn == 'S')? 1 : 2; 
+			turn = (turn == 'S')? 'O' : 'S';
+		}
+	}
+	*/
+
+
+
+
+}

@@ -1,0 +1,36 @@
+package sprint2_product;
+
+public class Interactive_Board {
+	private int[][] grid;
+	private char turn = 'S';
+	
+	
+	public Interactive_Board() {
+		grid = new int[4][4];
+	}
+	
+	
+	public int getCell(int row, int column) {
+		if (row >= 0 && row < 4 && column >= 0 && column < 4)
+			return grid[row][column];
+		else
+			return -1;
+	}
+
+	public char getTurn() {
+		return turn;
+	}
+	
+
+	public void makeMove(int row, int column) {
+		if (row >= 0 && row < 4 && column >= 0 && column < 4
+				&& grid[row][column] == 0) {
+			grid[row][column] = (turn == 'S')? 1 : 2; 
+			turn = (turn == 'S')? 'O' : 'S';
+		}
+	}
+
+
+
+
+}

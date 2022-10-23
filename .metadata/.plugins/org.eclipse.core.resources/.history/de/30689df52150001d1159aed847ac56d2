@@ -1,0 +1,25 @@
+package sprint2_product;
+
+import javax.swing.*;
+
+public class SOS_GUI extends JFrame {
+	public static final int CELL_SIZE = 100; 
+	public static final int GRID_WIDTH = 8; 
+	public static final int GRID_WIDHT_HALF = GRID_WIDTH / 2; 
+
+	public static final int CELL_PADDING = CELL_SIZE / 6;
+	public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2; 
+	public static final int SYMBOL_STROKE_WIDTH = 8; 
+	
+	private int CANVAS_WIDTH;
+	private int CANVAS_HEIGHT;
+	
+	private Canvas canvas;
+	private Interactive_Board board;
+	
+	
+	
+	
+
+
+}
