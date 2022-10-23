@@ -19,6 +19,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,9 +39,47 @@ public class SOS_GUI extends JFrame {
 	private int CANVAS_HEIGHT;
 	
 	private Canvas canvas;
-	//private TextField sizeField;
 	private Interactive_Board board;
-	//private Game_Options gameOptions;
+
+	//Panel for top of game window (game options)
+	JPanel gameOptions = new JPanel(new FlowLayout());
+	JTextField tf = new JTextField(3);
+	JLabel sizeFieldTxt = new JLabel("Board Size");
+	JLabel title = new JLabel("SOS");
+	ButtonGroup gameType = new ButtonGroup();
+	JRadioButton simple = new JRadioButton();
+	JRadioButton general = new JRadioButton();
+	
+	//
+	//Panel for left side of game window (blue player controls)
+	JPanel bluePlayerOptions = new JPanel();
+	//creates label for blue player buttons
+	JLabel bluePlayerTxt = new JLabel("Blue Player");
+	//button group for S and O buttons
+	ButtonGroup SOS_Buttons_B = new ButtonGroup();
+	//s button for blue player
+	JRadioButton Blue_S = new JRadioButton();
+	//o button for blue player
+	JRadioButton Blue_O = new JRadioButton();
+	
+
+	
+	//
+	//Panel for right of game window (red player controls)
+	JPanel redPlayerOptions = new JPanel();
+	//creates label for blue player buttons
+	JLabel redPlayerTxt = new JLabel("Red Player");
+	//button group for S and O buttons
+	ButtonGroup SOS_Buttons_R = new ButtonGroup();
+			
+	JRadioButton Red_s = new JRadioButton();
+	JRadioButton Red_o = new JRadioButton();
+	
+	//
+	//Panel for bottom of game window
+	JPanel currentTurn = new JPanel(new FlowLayout());
+	JLabel currTurnTitle = new JLabel();
+	
 	
 	
 	
@@ -48,6 +88,9 @@ public class SOS_GUI extends JFrame {
 	
 	public SOS_GUI(Interactive_Board board) {
 		this.board = board;
+		//disable blue buttons because red goes first
+		Blue_S.setEnabled(false);
+		Blue_O.setEnabled(false);
 		setContentPane();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); 
@@ -59,15 +102,30 @@ public class SOS_GUI extends JFrame {
 		return board;
 	}
 	
+	
+	public void updateTurns(String playerColor) {
+		//display current turn
+		currTurnTitle.setText("Current Turn: " + playerColor);
+		//disable radio buttons for other player
+		if(playerColor == "red") {
+			Blue_S.setEnabled(false);
+			Blue_O.setEnabled(false);
+			Red_s.setEnabled(true);
+			Red_o.setEnabled(true);
+		}
+		else {
+			Blue_S.setEnabled(true);
+			Blue_O.setEnabled(true);
+			Red_s.setEnabled(false);
+			Red_o.setEnabled(false);
+		}
+	}
 
 
 	
 	private void setContentPane(){
 		
 		//
-		//Panel for top of game window (game options)
-		JPanel gameOptions = new JPanel(new FlowLayout());
-		JTextField tf = new JTextField(3);
 		tf.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -81,15 +139,12 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
-		JLabel sizeFieldTxt = new JLabel("Board Size");
-		ButtonGroup gameType = new ButtonGroup();
-		JRadioButton simple = new JRadioButton();
-		JRadioButton general = new JRadioButton();
+
+
 		simple.setText("Simple Game");
 		general.setText("General Game");
 		gameType.add(simple);
 		gameType.add(general);
-		JLabel title = new JLabel("SOS");
 		gameOptions.add(title);
 		gameOptions.add(simple);
 		gameOptions.add(general);
@@ -98,45 +153,63 @@ public class SOS_GUI extends JFrame {
 		//
 		//
 		
-		//
-		//Panel for left side of game window (blue player controls)
-		JPanel bluePlayerOptions = new JPanel();
+		
 		bluePlayerOptions.setLayout(new BoxLayout(bluePlayerOptions, BoxLayout.Y_AXIS));
 		bluePlayerOptions.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
-		//creates label for blue player buttons
-		JLabel bluePlayerTxt = new JLabel("Blue Player");
-		//button group for S and O buttons
-		ButtonGroup SOS_Buttons_B = new ButtonGroup();
+
+		Blue_S.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.setPlayerSymbol(Blue_S.getText().charAt(0));
+			}	
+		});
 		
-		JRadioButton S = new JRadioButton();
-		JRadioButton O = new JRadioButton();
 		
-		S.setText("S");
-		O.setText("O");
+		Blue_O.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.setPlayerSymbol(Blue_O.getText().charAt(0));
+				
+			}
+			
+		});
 		
-		SOS_Buttons_B.add(S);
-		SOS_Buttons_B.add(O);
+		Blue_S.setText("S");
+		Blue_O.setText("O");
+		
+		SOS_Buttons_B.add(Blue_S);
+		SOS_Buttons_B.add(Blue_O);
 		
 		bluePlayerOptions.add(bluePlayerTxt);
-		bluePlayerOptions.add(S);
-		bluePlayerOptions.add(O);
+		bluePlayerOptions.add(Blue_S);
+		bluePlayerOptions.add(Blue_O);
 		
 		
-		//
-		//Panel for right of game window (red player controls)
-		JPanel redPlayerOptions = new JPanel();
 		redPlayerOptions.setLayout(new BoxLayout(redPlayerOptions, BoxLayout.Y_AXIS));
 		redPlayerOptions.setBorder(new EmptyBorder(10, 10, 10, 10));
 		
 		
-		//creates label for blue player buttons
-		JLabel redPlayerTxt = new JLabel("Red Player");
-		//button group for S and O buttons
-		ButtonGroup SOS_Buttons_R = new ButtonGroup();
-		
-		JRadioButton Red_s = new JRadioButton();
-		JRadioButton Red_o = new JRadioButton();
+		Red_s.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.setPlayerSymbol(Red_s.getText().charAt(0));
+				
+			}
+			
+		});
+
+		Red_o.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.setPlayerSymbol(Red_o.getText().charAt(0));
+				
+			}
+			
+		});
 		Red_s.setText("S");
 		Red_o.setText("O");
 		
@@ -149,26 +222,14 @@ public class SOS_GUI extends JFrame {
 		//
 		//
 		
-		
-		//
-		//Panel for bottom of game window
-		JPanel currentTurn = new JPanel(new FlowLayout());
-		JLabel currTurnTitle = new JLabel("Current Turn:");
-		JTextField currTurnTxt = new JTextField();
+		currTurnTitle.setText("Current Turn: " + board.getPlayerColor());
 		currentTurn.add(currTurnTitle);
-		currentTurn.add(currTurnTxt);
+
 		//
 		//
 		//Panel for center of game window (game board)
 		canvas = new Canvas();
-		
-		/*
-		CANVAS_WIDTH = CELL_SIZE * board.getBoardsize();  
-		CANVAS_HEIGHT = CELL_SIZE * board.getBoardsize();
-		canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
-		*/
-		//
-		//
+	
 
 		//
 		//Container for entire game window
@@ -193,10 +254,13 @@ public class SOS_GUI extends JFrame {
 						int rowSelected = e.getY() / CELL_SIZE;
 						int colSelected = e.getX() / CELL_SIZE;
 						board.makeMove(rowSelected, colSelected);
-					repaint(); 
+						repaint();
+						updateTurns(board.getPlayerColor());
 				}
+				
 			});
 		}
+
 		
 		@Override
 		public void paintComponent(Graphics g) {
@@ -229,15 +293,25 @@ public class SOS_GUI extends JFrame {
 				for (int col = 0; col < board.getBoardsize(); col++) {
 					int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y1 = row * CELL_SIZE + CELL_PADDING;
-					if (board.getCell(row,col) == 1) {
+					if(board.getCellClr(row, col) == "red") {
 						g2d.setColor(Color.RED);
+					}
+					else {
+						g2d.setColor(Color.BLUE);
+					}
+					if(board.getCell(row, col) == 1) {
 						int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 						g2d.setFont(new Font("TimesRoman", Font.BOLD, CELL_SIZE));
 						g2d.drawString("S", x1, y2);
-					} else if (board.getCell(row,col) == 2) {
-						g2d.setColor(Color.BLUE);
-						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
+						
 					}
+					else if(board.getCell(row,col) == 2) {
+						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
+						
+					}
+
+					
+					
 				}
 			}
 		}

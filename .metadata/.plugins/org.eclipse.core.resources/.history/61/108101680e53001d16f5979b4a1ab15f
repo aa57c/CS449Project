@@ -1,0 +1,18 @@
+package sprint2_product;
+
+import java.util.EventObject;
+
+@SuppressWarnings("serial")
+public class NextTurnEvent extends EventObject {
+	String player_color;
+
+	public NextTurnEvent(Object source, String clr) {
+		super(source);
+		this.player_color = clr;
+	}
+	public String getPlayerClr() {
+		return this.player_color;
+		
+	}
+
+}

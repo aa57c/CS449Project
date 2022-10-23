@@ -1,0 +1,85 @@
+package sprint2_product;
+
+
+
+public class Interactive_Board {
+	private MyPair[][] grid;
+	private char player_symbol = ' ';
+	private String player_color = "red";
+	private int boardsize;
+	
+	
+	public void setPlayerSymbol(char symbol) {
+		this.player_symbol = symbol;
+	}
+	
+	
+	public void setPlayerColor(String color) {
+		this.player_color = color;
+	}
+	
+	public String getPlayerColor() {
+		return this.player_color;
+	}
+	
+	public char getPlayerSymbol() {
+		return this.player_symbol;
+	}
+
+	
+	
+	public void setBoardsize(int size) {
+		this.boardsize = size;
+		this.grid = new MyPair[size][size];
+	}
+	
+	
+	public int getBoardsize() {
+		return this.boardsize;
+	}
+	
+	
+	public Interactive_Board() {
+		grid = new MyPair[this.boardsize][this.boardsize];
+	}
+	
+	
+	public int getCell(int row, int column) {
+		if (row >= 0 && row < this.boardsize && column >= 0 && column < this.boardsize)
+			return this.grid[row][column].getSym();
+		else
+			return -1;
+	}
+	
+	public String getCellClr(int row, int column) {
+		if (row >= 0 && row < this.boardsize && column >= 0 && column < this.boardsize)
+			return this.grid[row][column].getClr();
+		else
+			return "None";
+		
+	}
+
+	/*
+	 * Note for tomorrow (10/23/2022)
+	 * create setter, getter for symbol
+	 * create setter, getter for color
+	 * change makeMove to put symbol on board based on COLOR
+	 * 
+	 * 
+	 * 
+	 * 
+	 * */
+	public void makeMove(int row, int column) {
+		if (row >= 0 && row < this.boardsize && column >= 0 && column < this.boardsize
+				&& this.grid[row][column].getSym() == 0) {
+			this.grid[row][column] = (this.player_symbol == 'S')? 1 : 2; 
+			this.player_color = (this.player_color == "red")? "blue" : "red";
+		}
+	}
+	
+	
+
+
+
+
+}

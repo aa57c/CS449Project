@@ -13,4 +13,10 @@
     <fullyQualifiedTypeName name="javax.swing.border.EmptyBorder"/>
     <fullyQualifiedTypeName name="java.awt.event.KeyAdapter"/>
     <fullyQualifiedTypeName name="java.awt.event.KeyEvent"/>
+    <fullyQualifiedTypeName name="java.util.EventObject"/>
+    <fullyQualifiedTypeName name="java.util.EventListener"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="sprint2_product.SOS_GUI"/>
+    <fullyQualifiedTypeName name="sprint2_product.Interactive_Board"/>
 </qualifiedTypeNameHistroy>

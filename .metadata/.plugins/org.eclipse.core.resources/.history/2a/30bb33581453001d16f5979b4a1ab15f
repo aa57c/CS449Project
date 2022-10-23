@@ -1,0 +1,11 @@
+package sprint2_product;
+
+public class NextTurnEvent{
+	String player_color;
+	
+
+	public NextTurnEvent(String clr) {
+		this.player_color = clr;
+	}
+
+}
