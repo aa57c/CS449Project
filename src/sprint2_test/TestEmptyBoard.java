@@ -30,12 +30,12 @@ public class TestEmptyBoard {
 
 	@Test
 	public void testInvalidRow() {
-		assertEquals("", board.getCell(3, 0), -1); 
+		assertEquals("", board.getCell(this.board.getBoardsize(), 0), -1); 
 	}
 
 	@Test
 	public void testInvalidColumn() {
-		assertEquals("", board.getCell(0, 3), -1); 
+		assertEquals("", board.getCell(0, this.board.getBoardsize()), -1); 
 	}
 
 }

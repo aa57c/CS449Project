@@ -68,17 +68,7 @@ public class Interactive_Board {
 			return "None";
 		
 	}
-
-	/*
-	 * Note for tomorrow (10/23/2022)
-	 * create setter, getter for symbol
-	 * create setter, getter for color
-	 * change makeMove to put symbol on board based on COLOR
-	 * 
-	 * 
-	 * 
-	 * 
-	 * */
+	
 	public void makeMove(int row, int column) {
 		if (row >= 0 && row < this.boardsize && column >= 0 && column < this.boardsize
 				&& this.grid[row][column].getSym() == 0) {
@@ -88,10 +78,4 @@ public class Interactive_Board {
 			this.player_color = (this.player_color == "red")? "blue" : "red";
 		}
 	}
-	
-	
-
-
-
-
 }

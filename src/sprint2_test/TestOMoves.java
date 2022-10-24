@@ -13,20 +13,20 @@ public class TestOMoves {
 	@Before
 	public void setUp() throws Exception {
 		board = new Interactive_Board();
-		board.makeMove(1, 1);	// CROSS move, then it is NOUGHT's turn
+		board.makeMove(1, 1);	
 	}
 
-	// acceptance criterion 3.1
+
 	@Test
-	public void testNoughtTurnMoveVacantCell() {
-		board.makeMove(0, 0); // NOUGHT move
+	public void testOTurnMoveVacantCell() {
+		board.makeMove(0, 0); 
 		assertEquals("", board.getCell(0, 0), 2);
 		assertEquals("", board.getPlayerSymbol(), 'X');
 	}
 
-	// acceptance criterion 3.2
+
 	@Test
-	public void testNoughtTurnMoveNonVacantCell() {
+	public void testOTurnMoveNonVacantCell() {
 		board.makeMove(0, 0); // NOUGHT move
 		board.makeMove(1, 0); // CROSS move
 		assertEquals("", board.getPlayerSymbol(), 'O');
@@ -34,17 +34,17 @@ public class TestOMoves {
 		assertEquals("", board.getPlayerSymbol(), 'O');
 	}
 
-	// acceptance criterion 3.3 - 1
+
 	@Test
-	public void testNoughtTurnInvalidRowMove() {
-		board.makeMove(4, 0); 
+	public void testOTurnInvalidRowMove() {
+		board.makeMove(this.board.getBoardsize() + 1, 0); 
 		assertEquals("", board.getPlayerSymbol(), 'O');
 	}
 	
-	// acceptance criterion 3.3 - 1
+
 	@Test
-	public void testNoughtTurnInvalidColumnMove() {
-		board.makeMove(0, 4); 
+	public void testOInvalidColumnMove() {
+		board.makeMove(0, this.board.getBoardsize() + 1); 
 		assertEquals("", board.getPlayerSymbol(), 'O');
 	}
 

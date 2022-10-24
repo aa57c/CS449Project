@@ -302,16 +302,11 @@ public class SOS_GUI extends JFrame {
 					if(board.getCell(row, col) == 1) {
 						int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 						g2d.setFont(new Font("TimesRoman", Font.BOLD, CELL_SIZE));
-						g2d.drawString("S", x1, y2);
-						
+						g2d.drawString("S", x1, y2);	
 					}
 					else if(board.getCell(row,col) == 2) {
 						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
-						
-					}
-
-					
-					
+					}			
 				}
 			}
 		}

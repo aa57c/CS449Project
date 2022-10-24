@@ -42,14 +42,14 @@ public class TestSMoves {
 	// acceptance criterion 2.3 - 1
 	@Test
 	public void testCrossTurnInvalidRowMove() {
-		board.makeMove(4, 0);
+		board.makeMove(this.board.getBoardsize() + 1, 0);
 		assertEquals("", board.getPlayerSymbol(), 'X');
 	}
 
 	// acceptance criterion 2.3 - 2
 	@Test
 	public void testCrossTurnInvalidColumnMove() {
-		board.makeMove(0, 4);
+		board.makeMove(0, this.board.getBoardsize() + 1);
 		assertEquals("", board.getPlayerSymbol(), 'X');
 	}
 
