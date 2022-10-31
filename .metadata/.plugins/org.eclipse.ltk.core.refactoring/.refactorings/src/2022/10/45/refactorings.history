@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 3 elements to &apos;src/sprint3_product&apos;&#x0D;&#x0A;- Original project: &apos;src&apos;&#x0D;&#x0A;- Destination element: &apos;src/sprint3_product&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     sprint2_product.MyPair.java&#x0D;&#x0A;     sprint2_product.SOS_GUI.java&#x0D;&#x0A;     sprint2_product.Interactive_Board.java" description="Copy compilation units" destination="/&lt;sprint3_product" element1="/&lt;sprint2_product{MyPair.java" element2="/&lt;sprint2_product{SOS_GUI.java" element3="/&lt;sprint2_product{Interactive_Board.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1667246185817" units="3" version="1.0"/>
+</session>

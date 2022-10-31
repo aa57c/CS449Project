@@ -1,6 +1,0 @@
-package sprint2_product;
-
-public interface NextTurnListener{
-	public void switchPlayer(NextTurnEvent e);
-
-}

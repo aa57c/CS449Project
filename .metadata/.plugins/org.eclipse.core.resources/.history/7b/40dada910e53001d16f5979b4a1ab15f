@@ -1,8 +1,0 @@
-package sprint2_product;
-
-import java.util.EventListener;
-
-public interface NextTurnListener extends EventListener {
-	public void switchPlayer(NextTurnEvent e);
-
-}
