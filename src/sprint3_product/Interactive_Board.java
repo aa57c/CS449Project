@@ -85,9 +85,11 @@ public class Interactive_Board {
 	private void updateGameState(int row, int column) {
 		if(hasWon(row, column)) {
 			currentGameState = (this.player_color == "red") ? GameState.RED_WON : GameState.BLUE_WON;
+			this.player_symbol = ' ';
 		}
 		else if(isDraw()) {
 			currentGameState = GameState.DRAW;
+			this.player_symbol = ' ';
 		}
 	}
 	private boolean isDraw() {
