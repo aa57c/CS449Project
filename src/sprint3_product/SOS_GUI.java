@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import sprint3_product.Interactive_Board.Cell;
 import sprint3_product.Interactive_Board.GameState;
 @SuppressWarnings("serial")
 
@@ -115,7 +116,7 @@ public class SOS_GUI extends JFrame {
 		//display current turn
 		gameStatusText.setText("Current Turn: " + playerColor);
 		//debug code
-		//playerSymbol.setText("Current Symbol: " + playerSym);
+		playerSymbol.setText("Current Symbol: " + playerSym);
 		//disable radio buttons for other player
 		if(playerColor == "red") {
 			Blue_S.setEnabled(false);
@@ -260,7 +261,7 @@ public class SOS_GUI extends JFrame {
 
 		gameStatusBar.add(gameStatusText);
 		//debug
-		//gameStatusBar.add(playerSymbol);
+		gameStatusBar.add(playerSymbol);
 
 		//
 		//
@@ -342,18 +343,14 @@ public class SOS_GUI extends JFrame {
 				for (int col = 0; col < board.getBoardsize(); col++) {
 					int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y1 = row * CELL_SIZE + CELL_PADDING;
-					if(board.getCellClr(row, col) == "red") {
-						g2d.setColor(Color.RED);
-					}
-					else {
-						g2d.setColor(Color.BLUE);
-					}
-					if(board.getCell(row, col) == 1) {
+					if(board.getCell(row, col) == Cell.S) {
 						int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 						g2d.setFont(new Font("TimesRoman", Font.BOLD, CELL_SIZE));
+						g2d.setColor(Color.BLACK);
 						g2d.drawString("S", x1, y2);	
 					}
-					else if(board.getCell(row,col) == 2) {
+					else if(board.getCell(row,col) == Cell.O) {
+						g2d.setColor(Color.BLACK);
 						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
 					}			
 				}
@@ -365,8 +362,16 @@ public class SOS_GUI extends JFrame {
 				updateTurns(board.getPlayerColor(), board.getPlayerSymbol());
 			}
 			else if(board.getGameState() == GameState.DRAW) {
-				gameStatusText.setForeground(Color.RED);
+				gameStatusText.setForeground(Color.MAGENTA);
 				gameStatusText.setText("It's a Draw! Click to play again.");
+			}
+			else if(board.getGameState() == GameState.RED_WON) {
+				gameStatusText.setForeground(Color.RED);
+				gameStatusText.setText("Red Player Won! Click to play again.");
+			}
+			else if(board.getGameState() == GameState.BLUE_WON) {
+				gameStatusText.setForeground(Color.BLUE);
+				gameStatusText.setText("Blue Player Won! Click to play again.");
 			}
 		}
 

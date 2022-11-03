@@ -6,6 +6,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\ashna\eclipse-workspace\CS449Project"/>
 			<item value="C:\Users\ashna\eclipse-workspace\SOS"/>
 			<item value="C:\Users\ashna\eclipse-workspace\TicTacToeSwing"/>
 			<item value="C:\Users\ashna\eclipse-workspace\CS449_SOS_GAME\src"/>
