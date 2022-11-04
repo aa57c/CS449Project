@@ -24,8 +24,6 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
-import sprint3_product.Interactive_Board.Cell;
 import sprint3_product.Interactive_Board.GameState;
 @SuppressWarnings("serial")
 
@@ -100,6 +98,8 @@ public class SOS_GUI extends JFrame {
 		//disable blue buttons because red goes first
 		Blue_S.setEnabled(false);
 		Blue_O.setEnabled(false);
+		Blue_S.setSelected(false);
+		Blue_O.setSelected(false);
 		setContentPane();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); 
@@ -343,13 +343,13 @@ public class SOS_GUI extends JFrame {
 				for (int col = 0; col < board.getBoardsize(); col++) {
 					int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y1 = row * CELL_SIZE + CELL_PADDING;
-					if(board.getCell(row, col) == Cell.S) {
+					if(board.getCellSym(row, col) == 1) {
 						int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 						g2d.setFont(new Font("TimesRoman", Font.BOLD, CELL_SIZE));
 						g2d.setColor(Color.BLACK);
 						g2d.drawString("S", x1, y2);	
 					}
-					else if(board.getCell(row,col) == Cell.O) {
+					else if(board.getCellSym(row,col) == 2) {
 						g2d.setColor(Color.BLACK);
 						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
 					}			
