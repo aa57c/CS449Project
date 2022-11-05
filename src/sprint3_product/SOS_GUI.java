@@ -3,24 +3,16 @@ package sprint3_product;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -50,6 +42,7 @@ public class SOS_GUI extends JFrame {
 	ButtonGroup gameType = new ButtonGroup();
 	JRadioButton simple = new JRadioButton();
 	JRadioButton general = new JRadioButton();
+
 	
 	//
 	//Panel for left side of game window (blue player controls)
@@ -81,7 +74,7 @@ public class SOS_GUI extends JFrame {
 	JPanel gameStatusBar = new JPanel(new FlowLayout());
 	JLabel gameStatusText = new JLabel();
 	
-	JLabel playerSymbol = new JLabel();
+	//JLabel playerSymbol = new JLabel();
 	
 	//JPanel newGame = new JPanel(new FlowLayout());
 	JButton newGameButton = new JButton();
@@ -95,11 +88,20 @@ public class SOS_GUI extends JFrame {
 	
 	public SOS_GUI(Interactive_Board board) {
 		this.board = board;
-		//disable blue buttons because red goes first
+		//set simple and general game button texts
+		//simple.setText("Simple Game");
+		//general.setText("General Game");
+		//disable blue player buttons because red player goes first
 		Blue_S.setEnabled(false);
 		Blue_O.setEnabled(false);
-		Blue_S.setSelected(false);
-		Blue_O.setSelected(false);
+		//set default symbol for blue player
+		//Blue_S.setSelected(true);
+		//set default symbol for red player
+		//Red_S.setSelected(true);
+		//board.setPlayerSymbol(Red_S.getText().charAt(0));
+		//default game type
+		//simple.setSelected(true);
+		//board.setGameMode(simple.getText());
 		setContentPane();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); 
@@ -116,18 +118,18 @@ public class SOS_GUI extends JFrame {
 		//display current turn
 		gameStatusText.setText("Current Turn: " + playerColor);
 		//debug code
-		playerSymbol.setText("Current Symbol: " + playerSym);
+		//playerSymbol.setText("Current Symbol: " + playerSym);
 		//disable radio buttons for other player
 		if(playerColor == "red") {
 			Blue_S.setEnabled(false);
 			Blue_O.setEnabled(false);
 			Red_S.setEnabled(true);
-			//Red_S.setSelected(true);
+			Red_S.setSelected(true);
 			Red_O.setEnabled(true);
 		}
 		else {
 			Blue_S.setEnabled(true);
-			//Blue_S.setSelected(true);
+			Blue_S.setSelected(true);
 			Blue_O.setEnabled(true);
 			Red_S.setEnabled(false);
 			Red_O.setEnabled(false);
@@ -170,10 +172,11 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
-
-
 		simple.setText("Simple Game");
 		general.setText("General Game");
+
+
+
 		newGameButton.setText("New Game");
 		gameType.add(simple);
 		gameType.add(general);
@@ -257,11 +260,12 @@ public class SOS_GUI extends JFrame {
 		
 		gameStatusText.setText("Current Turn: " + board.getPlayerColor());
 		
-		playerSymbol.setText("Current Symbol: " + board.getPlayerSymbol());
+		//debug code
+		//playerSymbol.setText("Current Symbol: " + board.getPlayerSymbol());
 
 		gameStatusBar.add(gameStatusText);
 		//debug
-		gameStatusBar.add(playerSymbol);
+		//gameStatusBar.add(playerSymbol);
 
 		//
 		//
@@ -343,14 +347,20 @@ public class SOS_GUI extends JFrame {
 				for (int col = 0; col < board.getBoardsize(); col++) {
 					int x1 = col * CELL_SIZE + CELL_PADDING;
 					int y1 = row * CELL_SIZE + CELL_PADDING;
+					if(board.getCellClr(row, col) == "red") {
+						g2d.setColor(Color.RED);
+					}
+					else {
+						g2d.setColor(Color.BLUE);
+					}
 					if(board.getCellSym(row, col) == 1) {
 						int y2 = (row + 1) * CELL_SIZE - CELL_PADDING;
 						g2d.setFont(new Font("TimesRoman", Font.BOLD, CELL_SIZE));
-						g2d.setColor(Color.BLACK);
+						//g2d.setColor(Color.BLACK);
 						g2d.drawString("S", x1, y2);	
 					}
 					else if(board.getCellSym(row,col) == 2) {
-						g2d.setColor(Color.BLACK);
+						//g2d.setColor(Color.BLACK);
 						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
 					}			
 				}

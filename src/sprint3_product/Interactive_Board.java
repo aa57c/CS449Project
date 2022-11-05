@@ -98,14 +98,11 @@ public class Interactive_Board {
 	}
 
 	private void updateGameState(Cell turn, int row, int column) {
-		hasWon(turn, row, column);
-		/*
 		if(hasWon(turn, row, column)) {
 			currentGameState = (turn.getClr() == "red") ? GameState.RED_WON : GameState.BLUE_WON;
 			this.player_symbol = ' ';
 		}
-		*/
-		/*else*/ if(isDraw()) {
+		else if(isDraw()) {
 			currentGameState = GameState.DRAW;
 			this.player_symbol = ' ';
 		}
@@ -120,20 +117,48 @@ public class Interactive_Board {
 		}
 		return true;
 	}
+	private boolean isValidCell(int r, int c) {
+		return (r >= 0 && r < this.boardsize && c >= 0 && c < this.boardsize);
+		
+	}
+	private boolean isMatch(int r, int c, int sym, String clr) {
+		return(this.grid[r][c].getSym() > 0 && this.grid[r][c].getSym() == sym && this.grid[r][c].getClr() == clr);
+	}
+	private int getThirdCell(int start, int stop, int sym) {
+		int thirdCell = 0;
+		int Change;
+		if(sym == 1) {
+			//find change
+			Change = start - stop;
+			//apply change to target to find third cell
+			thirdCell = start + Change;
+		}
+		else if(sym == 2) {
+			Change = (start - stop) * -2;
+			thirdCell = start + Change;
+		}
+		return thirdCell;
+	}
 	//function stub for determining wins
-	private void hasWon(Cell turn, int row, int col) {
+	private boolean hasWon(Cell turn, int row, int col) {
 		//set target symbol and color based on turn (the target is the first space found after turn is made)
 		int targetSym = turn.getSym() == 1 ? 2 : 1;
 		String targetClr = turn.getClr() == "red" ? "red" : "blue";
+		int turnSym = this.grid[row][col].getSym();
+		
+		
 		//testing printing statements
+		/*
+		 * //String turnClr = this.grid[row][col].getClr();
 		System.out.println("Player's Turn: (" + row + "," + col + ")");
-		if(turn.getSym() == 1) {
-			System.out.println("Player's Color: " + turn.getClr() + ", Player's Symbol: S");
+		if(turnSym == 1) {
+			System.out.println("Player's Color: " + turnClr + ", Player's Symbol: S");
 		}
 		else {
-			System.out.println("Player's Color: " + turn.getClr() + ", Player's Symbol: O");
+			System.out.println("Player's Color: " + turnClr + ", Player's Symbol: O");
 		}
 		System.out.println("Neighbors of Player...");
+		*/
 		//loop through all neighbor cells
 		for(int r = row - 1; r <= row + 1; r++) {
 			for(int c = col - 1; c <= col + 1; c++) {
@@ -142,36 +167,31 @@ public class Interactive_Board {
 					continue;
 				}
 				//if the neighbor is within range of board
-				else if(r >= 0 && r < this.boardsize && c >= 0 && c < this.boardsize) {
-					System.out.println("(" + r + "," + c + ")");
+				else if(isValidCell(r, c)) {
+					//System.out.print("(" + r + "," + c + ")");
 					//if the space the neighbor is in is occupied and it matches the target, found the second symbol after turn is placed
-					if(this.grid[r][c].getSym() > 0 && this.grid[r][c].getSym() == targetSym && this.grid[r][c].getClr() == targetClr) {
-						System.out.println("Found Second Symbol");
-						//if()
+					if(isMatch(r, c, targetSym, targetClr)) {
+						//System.out.println("Found Second Symbol");
+						//if the current symbol (current turn) is S, then find change of target coord and current coord
+						//1 represents symbol S
+						//2 represent symbol O
+						
+						int thirdCellRow = getThirdCell(r, row, turnSym);
+						int thirdCellCol = getThirdCell(c, col, turnSym);
+						//if the third cell is within range of board
+						if(isValidCell(thirdCellRow, thirdCellCol)) {
+							if(isMatch(thirdCellRow, thirdCellCol, 1, targetClr)) {
+								//System.out.println("(" + thirdCellRow + "," + thirdCellCol + "), found winner!);
+								return true;
+									
+							}
+						}
+							
 					}
 				}
 			}
 		}
-		
-		/*
-		//check red wins
-		if(turn.getClr() == "red") {
-			//1 corresponds with the symbol 'S'
-			if(turn.getSym() == 1) {
-				if(this.grid[row][col + 1].getSym() == 2 ||
-						this.grid[row + 1][col + 1].getSym() == 2 ||
-						this.grid[row + 1][col].getSym() == 2 ||
-						this.grid[row + 1][col - 1].getSym() == 2 ||
-						this.grid[row][col - 1].getSym() == 2 ||
-						this.grid[row - 1][col - 1].getSym() == 2 ||
-						this.grid[row - 1][col].getSym() == 2) {
-					
-				}
-			}
-		}
-		*/
-		//return false;
-		
+		return false;
 		
 
 	}
