@@ -92,8 +92,6 @@ public class SOS_GUI extends JFrame {
 		//simple.setText("Simple Game");
 		//general.setText("General Game");
 		//disable blue player buttons because red player goes first
-		Blue_S.setEnabled(false);
-		Blue_O.setEnabled(false);
 		//set default symbol for blue player
 		//Blue_S.setSelected(true);
 		//set default symbol for red player
@@ -146,6 +144,21 @@ public class SOS_GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//set the board size and repaint grid canvas
 				board.setBoardsize(Integer.parseInt(tf.getText()));
+				//set the game mode
+				if(simple.isSelected()) {
+					board.setGameMode(simple.getText());
+				}
+				else if(general.isSelected()) {
+					board.setGameMode(general.getText());
+				}
+				if(board.getPlayerColor() == "red") {
+					Blue_S.setEnabled(false);
+					Blue_O.setEnabled(false);
+				}
+				else if(board.getPlayerColor() == "blue") {
+					Red_S.setEnabled(false);
+					Red_O.setEnabled(false);
+				}
 				canvas.paintComponent(canvas.getGraphics());
 				//resize JFrame (window) according to contents
 				pack();
@@ -155,6 +168,7 @@ public class SOS_GUI extends JFrame {
 			
 		});
 		
+		/*
 		simple.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -172,6 +186,8 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
+		*/
+		
 		simple.setText("Simple Game");
 		general.setText("General Game");
 

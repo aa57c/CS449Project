@@ -1,13 +1,14 @@
 package sprint3_product;
 
 public class Interactive_Board {
-	//public enum Cell {EMPTY, S, O}
 	public enum GameState {PLAYING, DRAW, RED_WON, BLUE_WON}
 	private String gameMode = "";
 	private GameState currentGameState;
 	private Cell[][] grid;
-	private char player_symbol = ' ';
+	private char player_symbol = 'S';
 	private String player_color = "red";
+	private int redWins = 0;
+	private int blueWins = 0;
 	private int boardsize;
 	
 	public void setGameMode(String mode) {
@@ -98,16 +99,50 @@ public class Interactive_Board {
 	}
 
 	private void updateGameState(Cell turn, int row, int column) {
-		if(hasWon(turn, row, column)) {
-			currentGameState = (turn.getClr() == "red") ? GameState.RED_WON : GameState.BLUE_WON;
-			this.player_symbol = ' ';
+		//if there is a win from either player AND the game mode is simple
+		if(hasWon(turn, row, column) && this.gameMode == "Simple Game") {
+			//verifies whether red or blue won
+			this.currentGameState = (turn.getClr() == "red") ? GameState.RED_WON : GameState.BLUE_WON;
+			//resets the player symbol and player color
+			//this.player_symbol = ' ';
+			//this.player_color = "red";
 		}
-		else if(isDraw()) {
-			currentGameState = GameState.DRAW;
-			this.player_symbol = ' ';
+		//if there is win from either player AND the game mode is general
+		else if(hasWon(turn, row, column) && this.gameMode == "General Game") {
+			//count red wins depending on the turn just played
+			this.redWins += (turn.getClr() == "red") ? 1 : 0;
+			//count blue wins depending on the turn just played
+			this.blueWins += (turn.getClr() == "blue") ? 1 : 0;
+		}
+		//if the board is full AND the game mode is simple, the game is a draw
+		else if(isBoardFull() && this.gameMode == "Simple Game") {
+			this.currentGameState = GameState.DRAW;
+			//this.player_symbol = ' ';
+			//this.player_color = "red";
+		}
+		//if the board is full AND the game mode is general
+		else if(isBoardFull() && this.gameMode == "General Game") {
+			//if red has more wins than blue player, red has won
+			if(this.redWins > this.blueWins) {
+				this.currentGameState = GameState.RED_WON;
+				//this.player_symbol = ' ';
+				//this.player_color = "red";
+			}
+			//if blue has more wins than the red player, blue has won
+			else if(this.blueWins > this.redWins) {
+				this.currentGameState = GameState.BLUE_WON;
+				//this.player_symbol = ' ';
+				//this.player_color = "red";
+			}
+			//if blue and red have the same amount of wins, the game is a draw
+			else if(this.redWins == this.blueWins) {
+				this.currentGameState = GameState.DRAW;
+				//this.player_symbol = ' ';
+				//this.player_color = "red";
+			}
 		}
 	}
-	private boolean isDraw() {
+	private boolean isBoardFull() {
 		for (int row = 0; row < this.boardsize; row++) {
 			for (int col = 0; col < this.boardsize; col++) {
 				if (this.grid[row][col].getSym() == 0) {
