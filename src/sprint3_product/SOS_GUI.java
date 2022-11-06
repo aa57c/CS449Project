@@ -145,7 +145,14 @@ public class SOS_GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//set the board size and repaint grid canvas
-				board.setBoardsize(Integer.parseInt(tf.getText()));
+				
+				if(Integer.parseInt(tf.getText()) < 0) {
+					board.setBoardsize(0);
+				}
+				else {
+					board.setBoardsize(Integer.parseInt(tf.getText()));
+				}
+				
 				//set the game mode
 				if(simple.isSelected()) {
 					board.setGameMode(simple.getText());
