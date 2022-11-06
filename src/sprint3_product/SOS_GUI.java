@@ -306,7 +306,6 @@ public class SOS_GUI extends JFrame {
 		//
 		//
 	}
-	
 
 	class Canvas extends JPanel {
 		

@@ -5,7 +5,7 @@ public class Interactive_Board {
 	private String gameMode = "";
 	private GameState currentGameState;
 	private Cell[][] grid;
-	private char player_symbol = 'S';
+	private char player_symbol = ' ';
 	private String player_color = "red";
 	private int redWins = 0;
 	private int blueWins = 0;
@@ -95,6 +95,7 @@ public class Interactive_Board {
 			this.grid[row][column].setMyPair(this.player_symbol == 'S' ? 1 : 2, this.player_color);
 			updateGameState(this.grid[row][column], row, column);
 			this.player_color = (this.player_color == "red")? "blue" : "red";
+			this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
 		}
 	}
 
@@ -104,8 +105,8 @@ public class Interactive_Board {
 			//verifies whether red or blue won
 			this.currentGameState = (turn.getClr() == "red") ? GameState.RED_WON : GameState.BLUE_WON;
 			//resets the player symbol and player color
-			//this.player_symbol = ' ';
-			//this.player_color = "red";
+			setPlayerSymbol(' ');
+			setPlayerColor("red");
 		}
 		//if there is win from either player AND the game mode is general
 		else if(hasWon(turn, row, column) && this.gameMode == "General Game") {
@@ -117,28 +118,28 @@ public class Interactive_Board {
 		//if the board is full AND the game mode is simple, the game is a draw
 		else if(isBoardFull() && this.gameMode == "Simple Game") {
 			this.currentGameState = GameState.DRAW;
-			//this.player_symbol = ' ';
-			//this.player_color = "red";
+			setPlayerSymbol(' ');
+			setPlayerColor("red");
 		}
 		//if the board is full AND the game mode is general
 		else if(isBoardFull() && this.gameMode == "General Game") {
 			//if red has more wins than blue player, red has won
 			if(this.redWins > this.blueWins) {
 				this.currentGameState = GameState.RED_WON;
-				//this.player_symbol = ' ';
-				//this.player_color = "red";
+				setPlayerSymbol(' ');
+				setPlayerColor("red");
 			}
 			//if blue has more wins than the red player, blue has won
 			else if(this.blueWins > this.redWins) {
 				this.currentGameState = GameState.BLUE_WON;
-				//this.player_symbol = ' ';
-				//this.player_color = "red";
+				setPlayerSymbol(' ');
+				setPlayerColor("red");
 			}
 			//if blue and red have the same amount of wins, the game is a draw
 			else if(this.redWins == this.blueWins) {
 				this.currentGameState = GameState.DRAW;
-				//this.player_symbol = ' ';
-				//this.player_color = "red";
+				setPlayerSymbol(' ');
+				setPlayerColor("red");
 			}
 		}
 	}
