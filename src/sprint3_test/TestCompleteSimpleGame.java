@@ -17,8 +17,6 @@ public class TestCompleteSimpleGame {
 	public void setUp() throws Exception{
 		board = new Interactive_Board();
 		board.setBoardsize(5);
-		board.setPlayerColor("red");
-		board.setPlayerSymbol('S');
 		board.setGameMode("Simple Game");
 	}
 	@After
@@ -28,14 +26,19 @@ public class TestCompleteSimpleGame {
 	@Test
 	public void testRedWon() {
 		//red move
+		board.setPlayerSymbol('S');
 		board.makeMove(2, 2);
 		//blue move
+		board.setPlayerSymbol('O');
 		board.makeMove(3, 3);
 		//red move
+		board.setPlayerSymbol('O');
 		board.makeMove(1, 2);
 		//blue move
+		board.setPlayerSymbol('S');
 		board.makeMove(3, 0);
 		//red move
+		board.setPlayerSymbol('S');
 		board.makeMove(0, 2);
 		assertEquals("", board.getGameState(), GameState.RED_WON);
 		new SOS_GUI(board);
@@ -48,16 +51,22 @@ public class TestCompleteSimpleGame {
 	}
 	public void testBlueWon() {
 		//red move
+		board.setPlayerSymbol('O');
 		board.makeMove(1, 0);
 		//blue move
+		board.setPlayerSymbol('S');
 		board.makeMove(3, 1);
 		//red move
+		board.setPlayerSymbol('S');
 		board.makeMove(0, 0);
 		//blue move
+		board.setPlayerSymbol('O');
 		board.makeMove(2, 2);
 		//red move
+		board.setPlayerSymbol('S');
 		board.makeMove(0, 1);
 		//blue move
+		board.setPlayerSymbol('S');
 		board.makeMove(1, 3);
 		assertEquals("", board.getGameState(), GameState.BLUE_WON);
 		new SOS_GUI(board);

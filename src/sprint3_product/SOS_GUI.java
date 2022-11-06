@@ -124,6 +124,7 @@ public class SOS_GUI extends JFrame {
 			Red_S.setEnabled(true);
 			Red_S.setSelected(true);
 			Red_O.setEnabled(true);
+			board.setPlayerSymbol(Red_S.getText().charAt(0));
 		}
 		else {
 			Blue_S.setEnabled(true);
@@ -131,6 +132,7 @@ public class SOS_GUI extends JFrame {
 			Blue_O.setEnabled(true);
 			Red_S.setEnabled(false);
 			Red_O.setEnabled(false);
+			board.setPlayerSymbol(Blue_S.getText().charAt(0));
 		}
 	}
 

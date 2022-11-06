@@ -11,6 +11,11 @@ public class Interactive_Board {
 	private int blueWins = 0;
 	private int boardsize;
 	
+	
+	public void resetWins() {
+		this.redWins = 0;
+		this.blueWins = 0;
+	}
 	public void setGameMode(String mode) {
 		this.gameMode = mode;
 	}
@@ -95,6 +100,8 @@ public class Interactive_Board {
 			this.grid[row][column].setMyPair(this.player_symbol == 'S' ? 1 : 2, this.player_color);
 			updateGameState(this.grid[row][column], row, column);
 			this.player_color = (this.player_color == "red")? "blue" : "red";
+			//this is just for testing purposes (I don't know if this actually matters while playing the game,
+			//since it still alternates regardless
 			this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
 		}
 	}
@@ -128,18 +135,21 @@ public class Interactive_Board {
 				this.currentGameState = GameState.RED_WON;
 				setPlayerSymbol(' ');
 				setPlayerColor("red");
+				resetWins();
 			}
 			//if blue has more wins than the red player, blue has won
 			else if(this.blueWins > this.redWins) {
 				this.currentGameState = GameState.BLUE_WON;
 				setPlayerSymbol(' ');
 				setPlayerColor("red");
+				resetWins();
 			}
 			//if blue and red have the same amount of wins, the game is a draw
 			else if(this.redWins == this.blueWins) {
 				this.currentGameState = GameState.DRAW;
 				setPlayerSymbol(' ');
 				setPlayerColor("red");
+				resetWins();
 			}
 		}
 	}
@@ -154,32 +164,38 @@ public class Interactive_Board {
 		return true;
 	}
 	private boolean isValidCell(int r, int c) {
+		//checks to see if the neighbors of the turn just played are within the range of the board
 		return (r >= 0 && r < this.boardsize && c >= 0 && c < this.boardsize);
 		
 	}
 	private boolean isMatch(int r, int c, int sym, String clr) {
+		//checks to see if second or third cell in pattern matches the symbol and color of the turn just played
 		return(this.grid[r][c].getSym() > 0 && this.grid[r][c].getSym() == sym && this.grid[r][c].getClr() == clr);
 	}
 	private int getThirdCell(int start, int stop, int sym) {
 		int thirdCell = 0;
 		int Change;
+		//if symbol is S, then find third cell in the same direction because S is last symbol in pattern
 		if(sym == 1) {
-			//find change
+			//finding the direction of pattern
 			Change = start - stop;
-			//apply change to target to find third cell
+			//apply change to second cell to find third cell
 			thirdCell = start + Change;
 		}
+		//if symbol is O, then find third cell in the reverse direction because O is middle symbol in pattern
 		else if(sym == 2) {
+			//finding the direction of pattern (negative is reverse)
 			Change = (start - stop) * -2;
+			//apply change to second cell to find third cell
 			thirdCell = start + Change;
 		}
 		return thirdCell;
 	}
 	//function stub for determining wins
 	private boolean hasWon(Cell turn, int row, int col) {
-		//set target symbol and color based on turn (the target is the first space found after turn is made)
-		int targetSym = turn.getSym() == 1 ? 2 : 1;
-		String targetClr = turn.getClr() == "red" ? "red" : "blue";
+		//set second symbol and color based on turn (the target is the first space found after turn is made)
+		int SecondSym = turn.getSym() == 1 ? 2 : 1;
+		String SecondClr = turn.getClr() == "red" ? "red" : "blue";
 		int turnSym = this.grid[row][col].getSym();
 		
 		
@@ -206,7 +222,7 @@ public class Interactive_Board {
 				else if(isValidCell(r, c)) {
 					//System.out.print("(" + r + "," + c + ")");
 					//if the space the neighbor is in is occupied and it matches the target, found the second symbol after turn is placed
-					if(isMatch(r, c, targetSym, targetClr)) {
+					if(isMatch(r, c, SecondSym, SecondClr)) {
 						//System.out.println("Found Second Symbol");
 						//if the current symbol (current turn) is S, then find change of target coord and current coord
 						//1 represents symbol S
@@ -216,7 +232,7 @@ public class Interactive_Board {
 						int thirdCellCol = getThirdCell(c, col, turnSym);
 						//if the third cell is within range of board
 						if(isValidCell(thirdCellRow, thirdCellCol)) {
-							if(isMatch(thirdCellRow, thirdCellCol, 1, targetClr)) {
+							if(isMatch(thirdCellRow, thirdCellCol, 1, SecondClr)) {
 								//System.out.println("(" + thirdCellRow + "," + thirdCellCol + "), found winner!);
 								return true;
 									
@@ -228,7 +244,6 @@ public class Interactive_Board {
 			}
 		}
 		return false;
-		
 
 	}
 	public GameState getGameState() {
