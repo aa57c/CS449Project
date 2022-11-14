@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -99,25 +100,9 @@ public class SOS_GUI extends JFrame {
 	
 	
 	
-	
-	
-	
-	
-	
 	public SOS_GUI(Board board) {
 		this.board = board;
-		//set simple and general game button texts
-		//simple.setText("Simple Game");
-		//general.setText("General Game");
-		//disable blue player buttons because red player goes first
-		//set default symbol for blue player
-		//Blue_S.setSelected(true);
-		//set default symbol for red player
-		//Red_S.setSelected(true);
-		//board.setPlayerSymbol(Red_S.getText().charAt(0));
-		//default game type
-		//simple.setSelected(true);
-		//board.setGameMode(simple.getText());
+		System.out.println("Creating SOS Board");
 		setContentPane();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack(); 
@@ -130,28 +115,32 @@ public class SOS_GUI extends JFrame {
 	}
 	
 	
-	public void updateTurns(String playerColor, char playerSym) {
+	public void updateTurns(String playerColor) {
 		//display current turn
 		gameStatusText.setText("Current Turn: " + playerColor);
 		//debug code
 		//playerSymbol.setText("Current Symbol: " + playerSym);
 		//disable radio buttons for other player
-		if(playerColor == "red") {
-			Blue_S.setEnabled(false);
-			Blue_O.setEnabled(false);
-			Red_S.setEnabled(true);
-			Red_S.setSelected(true);
-			Red_O.setEnabled(true);
-			board.setPlayerSymbol(Red_S.getText().charAt(0));
+		if(!canvas.isComputer(playerColor)) {
+			if(playerColor == "red") {
+				Blue_S.setEnabled(false);
+				Blue_O.setEnabled(false);
+				Red_S.setEnabled(true);
+				Red_S.setSelected(true);
+				Red_O.setEnabled(true);
+				board.setPlayerSymbol(Red_S.getText().charAt(0));
+			}
+			else {
+				Blue_S.setEnabled(true);
+				Blue_S.setSelected(true);
+				Blue_O.setEnabled(true);
+				Red_S.setEnabled(false);
+				Red_O.setEnabled(false);
+				board.setPlayerSymbol(Blue_S.getText().charAt(0));
+			}
+			
 		}
-		else {
-			Blue_S.setEnabled(true);
-			Blue_S.setSelected(true);
-			Blue_O.setEnabled(true);
-			Red_S.setEnabled(false);
-			Red_O.setEnabled(false);
-			board.setPlayerSymbol(Blue_S.getText().charAt(0));
-		}
+
 	}
 
 
@@ -178,14 +167,24 @@ public class SOS_GUI extends JFrame {
 				else if(general.isSelected()) {
 					board.setGameMode(general.getText());
 				}
-				if(board.getPlayerColor() == "red") {
-					Blue_S.setEnabled(false);
-					Blue_O.setEnabled(false);
-				}
-				else if(board.getPlayerColor() == "blue") {
-					Red_S.setEnabled(false);
-					Red_O.setEnabled(false);
-				}
+				
+				//disabling game mode, board size, human/computer buttons
+				simple.setEnabled(false);
+				general.setEnabled(false);
+				tf.setEnabled(false);
+				B_Human.setEnabled(false);
+				B_Computer.setEnabled(false);
+				R_Human.setEnabled(false);
+				R_Computer.setEnabled(false);
+				
+				//enabling S and O buttons
+				Red_S.setEnabled(true);
+				Red_S.setSelected(true);
+				Red_O.setEnabled(true);
+				Blue_S.setEnabled(true);
+				Blue_S.setSelected(true);
+				Blue_O.setEnabled(true);
+		
 				canvas.paintComponent(canvas.getGraphics());
 				//resize JFrame (window) according to contents
 				pack();
@@ -194,26 +193,6 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
-		
-		/*
-		simple.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.setGameMode(simple.getText());
-				
-			}
-			
-		});
-		
-		general.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.setGameMode(general.getText());	
-			}
-			
-		});
-		*/
 		
 		simple.setText("Simple Game");
 		general.setText("General Game");
@@ -359,17 +338,73 @@ public class SOS_GUI extends JFrame {
 						int rowSelected = e.getY() / CELL_SIZE;
 						int colSelected = e.getX() / CELL_SIZE;
 						board.makeMove(rowSelected, colSelected);
-						updateTurns(board.getPlayerColor(), board.getPlayerSymbol());
+						updateTurns(board.getPlayerColor());
+						computerTurn();
 						
 					}
 					else {
+						board.beginSetup();
 						board.InitializeGrid();
+						gameStatusText.setForeground(Color.BLACK);
+						gameStatusText.setText("Current Turn: ");
+						
 					}
 					repaint();
 
 				}
 				
 			});
+		}
+		
+		public Boolean isComputer(String playerClr) {
+			if(playerClr == "red" && R_Computer.isSelected()) {
+				return true;
+			}
+			else if(playerClr == "blue" && B_Computer.isSelected()) {
+				return true;
+			}
+			return false;		
+		}
+		public void changeSym(String playerClr) {
+			System.out.println("Blue S = " + Blue_S.isSelected());
+			System.out.println("Blue O = " + Blue_O.isSelected());
+			System.out.print("Player Color: " + playerClr);
+			if(playerClr == "red" && Red_S.isSelected()) {
+				System.out.println(" is S, changing to O");
+				Red_O.setSelected(true);
+				board.setPlayerSymbol(Red_O.getText().charAt(0));
+			}
+			else if(playerClr == "red" && Red_O.isSelected()) {
+				System.out.println(" is O, changing to S");
+				Red_S.setSelected(true);
+				board.setPlayerSymbol(Red_S.getText().charAt(0));
+			}
+			else if(playerClr == "blue" && Blue_S.isSelected()) {
+				System.out.println(" is S, changing to O");
+				Blue_O.setSelected(true);
+				board.setPlayerSymbol(Blue_O.getText().charAt(0));
+			}
+			else if(playerClr == "blue" && Blue_O.isSelected()) {
+				System.out.println(" is O, changing to S");
+				Blue_S.setSelected(true);
+				board.setPlayerSymbol(Blue_S.getText().charAt(0));
+			}
+		}
+		
+		public void computerTurn() {
+			if(board.getGameState() == GameState.PLAYING && isComputer(board.getPlayerColor())) {
+				System.out.println("current player is computer");
+				int randRow;
+				int randCol;
+				do {
+					randRow = ThreadLocalRandom.current().nextInt(0, board.getBoardsize());
+					randCol = ThreadLocalRandom.current().nextInt(0, board.getBoardsize());
+				}while(board.getCellContents(randRow, randCol).getSym() != 0);
+				changeSym(board.getPlayerColor());
+				board.makeMove(randRow, randCol);
+				repaint();
+			}
+			
 		}
 
 		
@@ -425,9 +460,30 @@ public class SOS_GUI extends JFrame {
 			}
 		}
 		private void printStatusBar() {
-			if(board.getGameState() == GameState.PLAYING) {
+			if(board.getGameState() == GameState.SETUP) {
+				System.out.println("In Setup Game");
 				gameStatusText.setForeground(Color.BLACK);
-				updateTurns(board.getPlayerColor(), board.getPlayerSymbol());
+				gameStatusText.setText("Select game mode, board size, and human/computer");
+				//enable game modes, board size, and human/computer buttons
+				simple.setEnabled(true);
+				simple.setSelected(true);
+				general.setEnabled(true);
+				tf.setEnabled(true);
+				B_Human.setEnabled(true);
+				B_Human.setSelected(true);
+				B_Computer.setEnabled(true);
+				R_Human.setEnabled(true);
+				R_Human.setSelected(true);
+				R_Computer.setEnabled(true);
+				//disable S and O for both red and blue players
+				Red_S.setEnabled(false);
+				Red_O.setEnabled(false);
+				Blue_S.setEnabled(false);
+				Blue_O.setEnabled(false);
+			}
+			else if(board.getGameState() == GameState.PLAYING) {
+				gameStatusText.setForeground(Color.BLACK);
+				updateTurns(board.getPlayerColor());
 			}
 			else if(board.getGameState() == GameState.DRAW) {
 				gameStatusText.setForeground(Color.MAGENTA);

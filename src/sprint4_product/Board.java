@@ -1,7 +1,7 @@
 package sprint4_product;
 
 public class Board {
-	public enum GameState {PLAYING, DRAW, RED_WON, BLUE_WON}
+	public enum GameState {SETUP, PLAYING, DRAW, RED_WON, BLUE_WON}
 	private String gameMode = "";
 	private GameState currentGameState;
 	private Cell[][] grid;
@@ -11,6 +11,9 @@ public class Board {
 	private int blueWins = 0;
 	private int boardsize;
 	
+	public Cell[][] returnGrid(){
+		return this.grid;
+	}
 	
 	public void resetWins() {
 		this.redWins = 0;
@@ -45,6 +48,7 @@ public class Board {
 	public void setBoardsize(int size) {
 		this.boardsize = size;
 		this.grid = new Cell[size][size];
+		this.currentGameState = GameState.PLAYING;
 		InitializeGrid();
 	}
 	
@@ -52,10 +56,13 @@ public class Board {
 		return this.boardsize;
 	}
 	
-	
+	public void beginSetup() {
+		this.currentGameState = GameState.SETUP;
+	}
 	public Board() {
-		grid = new Cell[this.boardsize][this.boardsize];
-		InitializeGrid();
+		//grid = new Cell[this.boardsize][this.boardsize];
+		this.currentGameState = GameState.SETUP;
+		//InitializeGrid();
 	}
 	
 	public void InitializeGrid() {
@@ -64,7 +71,6 @@ public class Board {
 				this.grid[row][col] = new Cell();
 			}
 		}
-		this.currentGameState = GameState.PLAYING;
 		
 	}
 	
@@ -97,12 +103,14 @@ public class Board {
 	public void makeMove(int row, int column) {
 		if (row >= 0 && row < this.boardsize && column >= 0 && column < this.boardsize
 				&& this.grid[row][column].getSym() == 0) {
+			//place move on board
 			this.grid[row][column].setMyPair(this.player_symbol == 'S' ? 1 : 2, this.player_color);
 			updateGameState(this.grid[row][column], row, column);
+			//update turns
 			this.player_color = (this.player_color == "red")? "blue" : "red";
 			//this is just for testing purposes (I don't know if this actually matters while playing the game,
 			//since it still alternates regardless
-			this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
+			//this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
 		}
 	}
 
