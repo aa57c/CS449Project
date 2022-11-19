@@ -102,7 +102,7 @@ public class Interactive_Board {
 			this.player_color = (this.player_color == "red")? "blue" : "red";
 			//this is just for testing purposes (I don't know if this actually matters while playing the game,
 			//since it still alternates regardless
-			this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
+			//this.player_symbol = (this.player_symbol == 'S') ? 'O' : 'S';
 		}
 	}
 

@@ -309,7 +309,6 @@ public class SOS_GUI extends JFrame {
 		//
 		//Panel for center of game window (game board)
 		canvas = new Canvas();
-		
 
 		//newGame.add(newGameButton);
 		
@@ -328,7 +327,6 @@ public class SOS_GUI extends JFrame {
 		//
 		//
 	}
-
 	class Canvas extends JPanel {
 		
 		Canvas(){
@@ -339,7 +337,8 @@ public class SOS_GUI extends JFrame {
 						int colSelected = e.getX() / CELL_SIZE;
 						board.makeMove(rowSelected, colSelected);
 						updateTurns(board.getPlayerColor());
-						computerTurn();
+						computerTurn();		
+
 						
 					}
 					else {
@@ -366,26 +365,26 @@ public class SOS_GUI extends JFrame {
 			return false;		
 		}
 		public void changeSym(String playerClr) {
-			System.out.println("Blue S = " + Blue_S.isSelected());
-			System.out.println("Blue O = " + Blue_O.isSelected());
-			System.out.print("Player Color: " + playerClr);
+			//System.out.println("Blue S = " + Blue_S.isSelected());
+			//System.out.println("Blue O = " + Blue_O.isSelected());
+			//System.out.print("Player Color: " + playerClr);
 			if(playerClr == "red" && Red_S.isSelected()) {
-				System.out.println(" is S, changing to O");
+				//System.out.println(" is S, changing to O");
 				Red_O.setSelected(true);
 				board.setPlayerSymbol(Red_O.getText().charAt(0));
 			}
 			else if(playerClr == "red" && Red_O.isSelected()) {
-				System.out.println(" is O, changing to S");
+				//System.out.println(" is O, changing to S");
 				Red_S.setSelected(true);
 				board.setPlayerSymbol(Red_S.getText().charAt(0));
 			}
 			else if(playerClr == "blue" && Blue_S.isSelected()) {
-				System.out.println(" is S, changing to O");
+				//System.out.println(" is S, changing to O");
 				Blue_O.setSelected(true);
 				board.setPlayerSymbol(Blue_O.getText().charAt(0));
 			}
 			else if(playerClr == "blue" && Blue_O.isSelected()) {
-				System.out.println(" is O, changing to S");
+				//System.out.println(" is O, changing to S");
 				Blue_S.setSelected(true);
 				board.setPlayerSymbol(Blue_S.getText().charAt(0));
 			}
@@ -461,7 +460,7 @@ public class SOS_GUI extends JFrame {
 		}
 		private void printStatusBar() {
 			if(board.getGameState() == GameState.SETUP) {
-				System.out.println("In Setup Game");
+				//System.out.println("In Setup Game");
 				gameStatusText.setForeground(Color.BLACK);
 				gameStatusText.setText("Select game mode, board size, and human/computer");
 				//enable game modes, board size, and human/computer buttons
@@ -484,6 +483,7 @@ public class SOS_GUI extends JFrame {
 			else if(board.getGameState() == GameState.PLAYING) {
 				gameStatusText.setForeground(Color.BLACK);
 				updateTurns(board.getPlayerColor());
+				computerTurn();
 			}
 			else if(board.getGameState() == GameState.DRAW) {
 				gameStatusText.setForeground(Color.MAGENTA);

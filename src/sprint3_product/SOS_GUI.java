@@ -122,17 +122,17 @@ public class SOS_GUI extends JFrame {
 			Blue_S.setEnabled(false);
 			Blue_O.setEnabled(false);
 			Red_S.setEnabled(true);
-			Red_S.setSelected(true);
+			//Red_S.setSelected(true);
 			Red_O.setEnabled(true);
-			board.setPlayerSymbol(Red_S.getText().charAt(0));
+			//board.setPlayerSymbol(playerSym);
 		}
 		else {
 			Blue_S.setEnabled(true);
-			Blue_S.setSelected(true);
+			//Blue_S.setSelected(true);
 			Blue_O.setEnabled(true);
 			Red_S.setEnabled(false);
 			Red_O.setEnabled(false);
-			board.setPlayerSymbol(Blue_S.getText().charAt(0));
+			//board.setPlayerSymbol(playerSym);
 		}
 	}
 
@@ -145,6 +145,9 @@ public class SOS_GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//set the board size and repaint grid canvas
+				
+				Red_S.setSelected(true);
+				Blue_S.setSelected(true);
 				
 				if(Integer.parseInt(tf.getText()) < 0) {
 					board.setBoardsize(0);
@@ -162,10 +165,15 @@ public class SOS_GUI extends JFrame {
 				}
 				if(board.getPlayerColor() == "red") {
 					Blue_S.setEnabled(false);
+					//Red_S.setSelected(true);
+					board.setPlayerSymbol(Red_S.getText().charAt(0));
 					Blue_O.setEnabled(false);
+					
 				}
 				else if(board.getPlayerColor() == "blue") {
 					Red_S.setEnabled(false);
+					//Blue_S.setSelected(true);
+					board.setPlayerSymbol(Blue_S.getText().charAt(0));
 					Red_O.setEnabled(false);
 				}
 				canvas.paintComponent(canvas.getGraphics());
@@ -174,6 +182,7 @@ public class SOS_GUI extends JFrame {
 				//removes focus from text box
 				tf.getRootPane().requestFocus();
 			}
+			
 			
 		});
 		
