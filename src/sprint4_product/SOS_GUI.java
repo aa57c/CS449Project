@@ -89,6 +89,38 @@ public class SOS_GUI extends JFrame {
 	//button for computer player
 	JRadioButton R_Computer = new JRadioButton();
 	
+	
+	
+	public JRadioButton returnRedHumanButton() {
+		return R_Human;
+	}
+	public JRadioButton returnRedComputerButton() {
+		return R_Computer;
+	}
+	public JRadioButton returnBlueHumanButton() {
+		return B_Human;
+	}
+	public JRadioButton returnBlueComputerButton() {
+		return B_Computer;
+	}
+	
+	public JButton returnNewGameButton() {
+		return newGameButton;
+	}
+	
+	public JRadioButton returnSimpleGameButton() {
+		return simple;
+	}
+	public JRadioButton returnGeneralGameButton() {
+		return general;
+	}
+	
+	public JTextField returnTextField() {
+		return tf;
+	}
+	
+
+	
 	//
 	//Panel for bottom of game window
 	JPanel gameStatusBar = new JPanel(new FlowLayout());
