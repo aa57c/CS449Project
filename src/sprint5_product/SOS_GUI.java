@@ -52,6 +52,7 @@ public class SOS_GUI extends JFrame {
 	JRadioButton simple = new JRadioButton();
 	JRadioButton general = new JRadioButton();
 	JCheckBox recordGame = new JCheckBox();
+	JCheckBox replay = new JCheckBox();
 	JButton newGameButton = new JButton();
 
 	
