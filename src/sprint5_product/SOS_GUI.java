@@ -2,6 +2,7 @@ package sprint5_product;
 
 import java.awt.BasicStroke;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -51,6 +52,7 @@ public class SOS_GUI extends JFrame {
 	JRadioButton simple = new JRadioButton();
 	JRadioButton general = new JRadioButton();
 	JCheckBox recordGame = new JCheckBox();
+	JButton newGameButton = new JButton();
 
 	
 	//
@@ -132,8 +134,7 @@ public class SOS_GUI extends JFrame {
 	JLabel gameStatusText = new JLabel();
 
 	
-	
-	JButton newGameButton = new JButton();
+
 	
 	
 	
@@ -238,20 +239,103 @@ public class SOS_GUI extends JFrame {
 			changeSym(board.getPlayerColor());
 			board.makeMove(randRow, randCol);
 			canvas.paintComponent(canvas.getGraphics());
+			recordMove(randRow, randCol);
 		}
 		
 	}
+	public void recordSettings()
+	{
+		if(recordGame.isSelected()) {
+			String gameSettings = "gm=";
+			//add game mode to settings string
+			if(simple.isSelected()) {
+				gameSettings += "s;";
+			}
+			else {
+				gameSettings += "g;";
+			}
+			//add board size to settings string
+			gameSettings += ("bs=" + board.getBoardsize() + ";");
+			
+			//add red player to settings string
+			gameSettings += "rp=";
+			if(R_Human.isSelected()) {
+				gameSettings += "h;";
+			}	
+			else if(R_Computer.isSelected()) {
+				gameSettings += "c;";
+			}
+			//add blue player to settings string
+			gameSettings += "bp=";
+			if(B_Human.isSelected()) {
+				gameSettings += "h;";
+			}
+			else if(B_Computer.isSelected()) {
+				gameSettings += "c;";
+			}
+			try {
+				myWriter = new FileWriter("GameRecords.txt");
+				myWriter.write(gameSettings + "\n");
+				
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	public void recordMove(int row, int col) {
-		
+		if(recordGame.isSelected()) {
+			String move = "plr=";
+			//add player color to move string
+			if(board.getCellClr(row, col) == "red") {
+				move += "r;";
+			}
+			else if(board.getCellClr(row, col) == "blue") {
+				move += "b;";
+			}
+			//add player symbol to move string
+			move += "sym=";
+			if(board.getCellSym(row, col) == 1) {
+				move += "S;";
+			}
+			else if(board.getCellSym(row, col) == 2) {
+				move += "O;";
+			}
+			//add row of move
+			move += ("row=" + row + ";");
+			//add column of move
+			move += ("col=" + col + ";");
+			try {
+				myWriter.write(move + "\n");
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void recordResult(GameState gameState) {
+		if(recordGame.isSelected()) {
+			String result = "res=";
+			if(gameState == GameState.RED_WON) {
+				result += "r;";
+			}
+			else if(gameState == GameState.BLUE_WON) {
+				result += "b;";
+			}
+			else if(gameState == GameState.DRAW) {
+				result += "d;";
+			}
+			try {
+				myWriter.write(result);
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 
 
 	
 	private void setContentPane(){
-		
-
-		
 		//
 		newGameButton.addActionListener(new ActionListener() {
 			@Override
@@ -264,9 +348,9 @@ public class SOS_GUI extends JFrame {
 				}
 				else {
 					board.setBoardsize(Integer.parseInt(tf.getText()));
+					
 						
 				}
-				
 				//set the game mode
 				if(simple.isSelected()) {
 					board.setGameMode(simple.getText());
@@ -275,47 +359,12 @@ public class SOS_GUI extends JFrame {
 				else if(general.isSelected()) {
 					board.setGameMode(general.getText());
 				}
-				//starts record of game if the check box is clicked
 				if(recordGame.isSelected()) {
-					try {
-						if(R_Human.isSelected() && B_Human.isSelected()){
-							myWriter.write("Human (Red) v. Human (Blue)");
-							myWriter.close();
-							System.out.println("Successfully wrote to the file.");
-						}
-						else if(R_Human.isSelected() && B_Computer.isSelected()) {
-							myWriter.write("Human (Red) v. Computer (Blue)");
-							myWriter.close();
-							System.out.println("Successfully wrote to the file.");
-						}
-						else if(R_Computer.isSelected() && B_Human.isSelected()) {
-							myWriter.write("Human (Blue) v. Computer (Red)");
-							myWriter.close();
-							System.out.println("Successfully wrote to the file.");
-						}
-						if(tf.getText() != "") {
-							myWriter.write("Board Size: " + board.getBoardsize());
-							myWriter.close();
-							System.out.println("Successfully recorded game size");
-						
-						}
-						if(simple.isSelected()) {
-								myWriter.write("Game Mode: " + board.getGameMode());
-								myWriter.close();
-								System.out.println("Successfully recorded game size");
-						}
-						else if(general.isSelected()) {
-							myWriter.write("Game Mode: " + board.getGameMode());
-							myWriter.close();
-							System.out.println("Successfully recorded game size");
-						}
-					} catch(IOException e1) {
-					      System.out.println("An error occurred.");
-					      e1.printStackTrace();
-					}
+					recordSettings();
 				}
+
 				
-				//disabling game mode, board size, human/computer buttons
+				//disabling game mode, board size, human/computer buttons, record game box
 				simple.setEnabled(false);
 				general.setEnabled(false);
 				tf.setEnabled(false);
@@ -341,19 +390,6 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
-		recordGame.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					myWriter = new FileWriter("C:\\Users\\ashna\\eclipse-workspace\\CS449Project\\src\\sprint5_product\\GameRecords.txt");
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-			}
-			
-		});
 		
 
 		
@@ -371,8 +407,8 @@ public class SOS_GUI extends JFrame {
 		gameOptions.add(general);
 		gameOptions.add(sizeFieldTxt);
 		gameOptions.add(tf);
-		gameOptions.add(newGameButton);
 		gameOptions.add(recordGame);
+		gameOptions.add(newGameButton);
 		//
 		//
 		
@@ -542,6 +578,7 @@ public class SOS_GUI extends JFrame {
 						int colSelected = e.getX() / CELL_SIZE;
 						board.makeMove(rowSelected, colSelected);
 						updateTurns(board.getPlayerColor());
+						recordMove(rowSelected, colSelected);
 						//check if next player is a computer
 						computerTurn();		
 
@@ -655,14 +692,32 @@ public class SOS_GUI extends JFrame {
 			else if(board.getGameState() == GameState.DRAW) {
 				gameStatusText.setForeground(Color.MAGENTA);
 				gameStatusText.setText("It's a Draw! Click to play again.");
+				recordResult(board.getGameState());
+				try {
+					myWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			else if(board.getGameState() == GameState.RED_WON) {
 				gameStatusText.setForeground(Color.RED);
 				gameStatusText.setText("Red Player Won! Click to play again.");
+				recordResult(board.getGameState());
+				try {
+					myWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			else if(board.getGameState() == GameState.BLUE_WON) {
 				gameStatusText.setForeground(Color.BLUE);
 				gameStatusText.setText("Blue Player Won! Click to play again.");
+				recordResult(board.getGameState());
+				try {
+					myWriter.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
