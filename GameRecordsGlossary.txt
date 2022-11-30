@@ -1,0 +1,16 @@
+Keys:
+
+gm = GAME MODE
+bs = BOARD SIZE
+rp = RED PLAYER
+bp = BLUE PLAYER
+plr = PLAYER TURN
+sym = SYMBOL PLAYED ON TURN
+row = ROW SYMBOL WAS PLACED
+col = COL SYMBOL WAS PLACED
+
+
+Values:
+r = RED'S TURN
+b = BLUE'S TURN
+

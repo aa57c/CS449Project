@@ -42,6 +42,7 @@ public class SOS_GUI extends JFrame {
 	private Canvas canvas;
 	private Board board;
 	private FileWriter myWriter;
+	//private FileReader myReader;
 
 	//Panel for top of game window (game options)
 	JPanel gameOptions = new JPanel(new FlowLayout());
@@ -360,9 +361,7 @@ public class SOS_GUI extends JFrame {
 				else if(general.isSelected()) {
 					board.setGameMode(general.getText());
 				}
-				if(recordGame.isSelected()) {
-					recordSettings();
-				}
+				recordSettings();
 
 				
 				//disabling game mode, board size, human/computer buttons, record game box
@@ -392,11 +391,22 @@ public class SOS_GUI extends JFrame {
 			
 		});
 		
+		replay.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				board.beginReplay(board.getBoardsize());
+				
+			}
+			
+		});
+		
 
 		
 		simple.setText("Simple Game");
 		general.setText("General Game");
 		recordGame.setText("Record Game");
+		replay.setText("Replay Game");
 
 
 
@@ -409,6 +419,7 @@ public class SOS_GUI extends JFrame {
 		gameOptions.add(sizeFieldTxt);
 		gameOptions.add(tf);
 		gameOptions.add(recordGame);
+		gameOptions.add(replay);
 		gameOptions.add(newGameButton);
 		//
 		//
@@ -657,6 +668,8 @@ public class SOS_GUI extends JFrame {
 				//System.out.println("In Setup Game");
 				newGameButton.setEnabled(false);
 				recordGame.setEnabled(false);
+				replay.setEnabled(false);
+				
 				gameStatusText.setForeground(Color.BLACK);
 				gameStatusText.setText("Select game mode, board size, and human/computer");
 				//enable game modes, board size, and human/computer buttons
@@ -684,6 +697,10 @@ public class SOS_GUI extends JFrame {
 				Blue_O.setEnabled(false);
 
 			}
+			else if(board.getGameState() == GameState.REPLAY) {
+				gameStatusText.setForeground(Color.ORANGE);
+				gameStatusText.setText("Replaying Game");
+			}
 			else if(board.getGameState() == GameState.PLAYING) {
 				gameStatusText.setForeground(Color.BLACK);
 				updateTurns(board.getPlayerColor());
@@ -699,6 +716,7 @@ public class SOS_GUI extends JFrame {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				replay.setEnabled(true);
 			}
 			else if(board.getGameState() == GameState.RED_WON) {
 				gameStatusText.setForeground(Color.RED);
@@ -709,6 +727,7 @@ public class SOS_GUI extends JFrame {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				replay.setEnabled(true);
 			}
 			else if(board.getGameState() == GameState.BLUE_WON) {
 				gameStatusText.setForeground(Color.BLUE);
@@ -719,6 +738,8 @@ public class SOS_GUI extends JFrame {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				replay.setEnabled(true);
+
 			}
 		}
 
