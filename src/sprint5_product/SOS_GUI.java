@@ -3,6 +3,8 @@ package sprint5_product;
 import java.awt.BasicStroke;
 
 
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -11,6 +13,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -42,7 +46,6 @@ public class SOS_GUI extends JFrame {
 	private Canvas canvas;
 	private Board board;
 	private FileWriter myWriter;
-	//private FileReader myReader;
 
 	//Panel for top of game window (game options)
 	JPanel gameOptions = new JPanel(new FlowLayout());
@@ -113,6 +116,21 @@ public class SOS_GUI extends JFrame {
 		return B_Computer;
 	}
 	
+	public JRadioButton returnRedS() {
+		return Red_S;
+	}
+	public JRadioButton returnRedO() {
+		return Red_O;
+	}
+	
+	public JRadioButton returnBlueS() {
+		return Blue_S;
+	}
+	public JRadioButton returnBlueO() {
+		return Blue_O;
+	}
+	
+	
 	public JButton returnNewGameButton() {
 		return newGameButton;
 	}
@@ -152,6 +170,10 @@ public class SOS_GUI extends JFrame {
 
 	public Board getBoard() {
 		return board;
+	}
+	
+	public Canvas getCanvas() {
+		return canvas;
 	}
 	
 	
@@ -240,10 +262,24 @@ public class SOS_GUI extends JFrame {
 			}while(board.getCellContents(randRow, randCol).getSym() != 0);
 			changeSym(board.getPlayerColor());
 			board.makeMove(randRow, randCol);
-			canvas.paintComponent(canvas.getGraphics());
 			recordMove(randRow, randCol);
+			canvas.paintComponent(canvas.getGraphics());
 		}
 		
+	}
+	public void closeFile() {
+		try {
+			myWriter.write("\n\n");
+			myWriter.flush();
+			Thread.sleep(5000);
+			myWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	public void recordSettings()
 	{
@@ -276,8 +312,12 @@ public class SOS_GUI extends JFrame {
 				gameSettings += "c;";
 			}
 			try {
-				myWriter = new FileWriter("GameRecords.txt");
-				myWriter.write(gameSettings + "\n");
+				LocalDateTime date = LocalDateTime.now();
+				DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+				String formatted_date = date.format(date_format);
+				myWriter = new FileWriter("GameRecords.txt", true);
+				myWriter.write("Date played: " + formatted_date + "\n");
+				myWriter.write(gameSettings + "\n");	
 				
 			} catch(IOException e) {
 				e.printStackTrace();
@@ -381,12 +421,15 @@ public class SOS_GUI extends JFrame {
 				Blue_S.setEnabled(true);
 				Blue_S.setSelected(true);
 				Blue_O.setEnabled(true);
+				
+				
 		
 				canvas.paintComponent(canvas.getGraphics());
 				//resize JFrame (window) according to contents
 				pack();
 				//removes focus from text box
 				tf.getRootPane().requestFocus();
+				System.out.println(board.getGameState().toString());
 			}
 			
 		});
@@ -592,8 +635,7 @@ public class SOS_GUI extends JFrame {
 						updateTurns(board.getPlayerColor());
 						recordMove(rowSelected, colSelected);
 						//check if next player is a computer
-						computerTurn();		
-
+						computerTurn();
 						
 					}
 					else {
@@ -668,7 +710,7 @@ public class SOS_GUI extends JFrame {
 				//System.out.println("In Setup Game");
 				newGameButton.setEnabled(false);
 				recordGame.setEnabled(false);
-				replay.setEnabled(false);
+				replay.setSelected(false);
 				
 				gameStatusText.setForeground(Color.BLACK);
 				gameStatusText.setText("Select game mode, board size, and human/computer");
@@ -711,34 +753,21 @@ public class SOS_GUI extends JFrame {
 				gameStatusText.setForeground(Color.MAGENTA);
 				gameStatusText.setText("It's a Draw! Click to play again.");
 				recordResult(board.getGameState());
-				try {
-					myWriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				replay.setEnabled(true);
+				closeFile();
+
 			}
 			else if(board.getGameState() == GameState.RED_WON) {
 				gameStatusText.setForeground(Color.RED);
 				gameStatusText.setText("Red Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				try {
-					myWriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				replay.setEnabled(true);
+				closeFile();
+
 			}
 			else if(board.getGameState() == GameState.BLUE_WON) {
 				gameStatusText.setForeground(Color.BLUE);
 				gameStatusText.setText("Blue Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				try {
-					myWriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				replay.setEnabled(true);
+				closeFile();
 
 			}
 		}
