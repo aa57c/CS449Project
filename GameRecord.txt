@@ -1,0 +1,9 @@
+06-12-2022 21:38:22
+gm=s;bs=5;rp=h;bp=h;
+plr=r;sym=S;row=0;col=1;
+plr=b;sym=O;row=0;col=0;
+plr=r;sym=O;row=0;col=2;
+plr=b;sym=S;row=3;col=2;
+plr=r;sym=S;row=0;col=3;
+res=r
+

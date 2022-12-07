@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 
 
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -21,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.*;
@@ -43,6 +45,7 @@ public class SOS_GUI extends JFrame {
 	private int CANVAS_WIDTH;
 	private int CANVAS_HEIGHT;
 	
+	private ArrayList<String> fileContent = new ArrayList<String>();
 	private Canvas canvas;
 	private Board board;
 	private FileWriter myWriter;
@@ -56,7 +59,6 @@ public class SOS_GUI extends JFrame {
 	JRadioButton simple = new JRadioButton();
 	JRadioButton general = new JRadioButton();
 	JCheckBox recordGame = new JCheckBox();
-	JCheckBox replay = new JCheckBox();
 	JButton newGameButton = new JButton();
 
 	
@@ -102,6 +104,9 @@ public class SOS_GUI extends JFrame {
 	JRadioButton R_Computer = new JRadioButton();
 	
 	
+	public JCheckBox returnRecordGameComponent() {
+		return recordGame;
+	}
 	
 	public JRadioButton returnRedHumanButton() {
 		return R_Human;
@@ -145,6 +150,12 @@ public class SOS_GUI extends JFrame {
 	public JTextField returnTextField() {
 		return tf;
 	}
+	
+	public void addFileContent(String content) {
+		System.out.println("file content added");
+		this.fileContent.add(content);
+	}
+	
 	
 
 	
@@ -267,18 +278,22 @@ public class SOS_GUI extends JFrame {
 		}
 		
 	}
-	public void closeFile() {
+	public void writeFile() {
+		LocalDateTime date = LocalDateTime.now();
+		DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		String formatted_date = date.format(date_format);
 		try {
-			myWriter.write("\n\n");
-			myWriter.flush();
-			Thread.sleep(5000);
+			myWriter = new FileWriter("GameRecord.txt");
+			myWriter.write(formatted_date + "\n");
+			for(String s : this.fileContent) {
+				myWriter.write(s + "\n");
+				System.out.println("writing to file");
+			}
+			System.out.println("closed file");
+			myWriter.write("\n");
 			myWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 	}
 	public void recordSettings()
@@ -311,17 +326,7 @@ public class SOS_GUI extends JFrame {
 			else if(B_Computer.isSelected()) {
 				gameSettings += "c;";
 			}
-			try {
-				LocalDateTime date = LocalDateTime.now();
-				DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-				String formatted_date = date.format(date_format);
-				myWriter = new FileWriter("GameRecords.txt", true);
-				myWriter.write("Date played: " + formatted_date + "\n");
-				myWriter.write(gameSettings + "\n");	
-				
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+			addFileContent(gameSettings);
 		}
 	}
 	public void recordMove(int row, int col) {
@@ -346,11 +351,9 @@ public class SOS_GUI extends JFrame {
 			move += ("row=" + row + ";");
 			//add column of move
 			move += ("col=" + col + ";");
-			try {
-				myWriter.write(move + "\n");
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
+			
+			addFileContent(move);
+			
 		}
 	}
 	
@@ -366,11 +369,7 @@ public class SOS_GUI extends JFrame {
 			else if(gameState == GameState.DRAW) {
 				result += "d;";
 			}
-			try {
-				myWriter.write(result);
-			}catch(IOException e) {
-				e.printStackTrace();
-			}
+			addFileContent(result);
 		}
 	}
 
@@ -434,22 +433,11 @@ public class SOS_GUI extends JFrame {
 			
 		});
 		
-		replay.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				board.beginReplay(board.getBoardsize());
-				
-			}
-			
-		});
-		
 
 		
 		simple.setText("Simple Game");
 		general.setText("General Game");
 		recordGame.setText("Record Game");
-		replay.setText("Replay Game");
 
 
 
@@ -462,7 +450,6 @@ public class SOS_GUI extends JFrame {
 		gameOptions.add(sizeFieldTxt);
 		gameOptions.add(tf);
 		gameOptions.add(recordGame);
-		gameOptions.add(replay);
 		gameOptions.add(newGameButton);
 		//
 		//
@@ -632,8 +619,8 @@ public class SOS_GUI extends JFrame {
 						int rowSelected = e.getY() / CELL_SIZE;
 						int colSelected = e.getX() / CELL_SIZE;
 						board.makeMove(rowSelected, colSelected);
-						updateTurns(board.getPlayerColor());
 						recordMove(rowSelected, colSelected);
+						updateTurns(board.getPlayerColor());
 						//check if next player is a computer
 						computerTurn();
 						
@@ -710,7 +697,6 @@ public class SOS_GUI extends JFrame {
 				//System.out.println("In Setup Game");
 				newGameButton.setEnabled(false);
 				recordGame.setEnabled(false);
-				replay.setSelected(false);
 				
 				gameStatusText.setForeground(Color.BLACK);
 				gameStatusText.setText("Select game mode, board size, and human/computer");
@@ -746,28 +732,27 @@ public class SOS_GUI extends JFrame {
 			else if(board.getGameState() == GameState.PLAYING) {
 				gameStatusText.setForeground(Color.BLACK);
 				updateTurns(board.getPlayerColor());
-				//check if next player is a computer
 				computerTurn();
 			}
 			else if(board.getGameState() == GameState.DRAW) {
 				gameStatusText.setForeground(Color.MAGENTA);
 				gameStatusText.setText("It's a Draw! Click to play again.");
 				recordResult(board.getGameState());
-				closeFile();
+				writeFile();
 
 			}
 			else if(board.getGameState() == GameState.RED_WON) {
 				gameStatusText.setForeground(Color.RED);
 				gameStatusText.setText("Red Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				closeFile();
+				writeFile();
 
 			}
 			else if(board.getGameState() == GameState.BLUE_WON) {
 				gameStatusText.setForeground(Color.BLUE);
 				gameStatusText.setText("Blue Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				closeFile();
+				writeFile();
 
 			}
 		}

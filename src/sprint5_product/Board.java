@@ -11,6 +11,7 @@ public class Board {
 	private int blueWins = 0;
 	private int boardsize;
 	
+	
 	public Cell[][] returnGrid(){
 		return this.grid;
 	}
