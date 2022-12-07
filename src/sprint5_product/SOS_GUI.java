@@ -283,7 +283,7 @@ public class SOS_GUI extends JFrame {
 		DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		String formatted_date = date.format(date_format);
 		try {
-			myWriter = new FileWriter("GameRecord.txt");
+			myWriter = new FileWriter("GameRecord.txt", true);
 			myWriter.write(formatted_date + "\n");
 			for(String s : this.fileContent) {
 				myWriter.write(s + "\n");
