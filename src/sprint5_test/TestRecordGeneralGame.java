@@ -1,7 +1,7 @@
 package sprint5_test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,7 +15,8 @@ import sprint5_product.Board;
 import sprint5_product.Board.GameState;
 import sprint5_product.SOS_GUI;
 
-public class TestRecordSimpleGame {
+
+public class TestRecordGeneralGame {
 	private Board board;
 	private ArrayList<String> fileContent = new ArrayList<String>();
 	
@@ -23,7 +24,7 @@ public class TestRecordSimpleGame {
 	@Before
 	public void setUp() {
 		this.board = new Board();
-		this.board.setGameMode("Simple Game");
+		this.board.setGameMode("General Game");
 		this.board.setBoardsize(5);
 		
 	}
@@ -34,7 +35,7 @@ public class TestRecordSimpleGame {
 	@Test
 	public void TestHumanVHuman() {
 		//record game settings
-		String gameSettings = "gm=s;";
+		String gameSettings = "gm=g;";
 		gameSettings += "bs=" + board.getBoardsize() + ";rp=h;bp=h;\n";
 		this.fileContent.add(gameSettings);
 		
@@ -73,7 +74,32 @@ public class TestRecordSimpleGame {
 		move5 += "sym=S;row=1;col=3;\n";
 		this.fileContent.add(move5);
 		
-		assertEquals("", board.getGameState(), GameState.RED_WON);
+
+		for(int r = 0; r < board.getBoardsize(); r++) {
+			for(int c = 0; c < board.getBoardsize(); c++) {
+				if(board.getCellSym(r, c) != 0) {
+					continue;
+				}
+				else {
+					if(board.getPlayerSymbol() == 'S') {
+						board.setPlayerSymbol('O');
+					}
+					else if(board.getPlayerSymbol() == 'O') {
+						board.setPlayerSymbol('S');
+					}
+					board.makeMove(r, c);
+					String move = "plr=" + board.getCellClr(r, c).charAt(0) + ";sym=" + 
+					(board.getCellSym(r, c) == 1 ? "S;" : "O;") + "row=" + r + ";col=" + c + ";\n";
+					this.fileContent.add(move);
+				}
+			}
+		}
+		
+		
+		assertTrue(board.getGameState() == GameState.BLUE_WON || 
+				board.getGameState() == GameState.RED_WON ||
+				board.getGameState() == GameState.DRAW);
+
 		assertNotEquals("", fileContent.size(), 0);
 		new SOS_GUI(this.board);
 		try {
@@ -90,7 +116,7 @@ public class TestRecordSimpleGame {
 	@After
 	public void writeFile() {
 		try {
-			FileWriter fileWriter = new FileWriter("src/sprint5_test/TestGameRecords/SimpleGameRecords.txt");
+			FileWriter fileWriter = new FileWriter("src/sprint5_test/TestGameRecords/GeneralGameRecords.txt");
 			for(String s : this.fileContent) {
 				fileWriter.write(s);
 			}
@@ -101,21 +127,6 @@ public class TestRecordSimpleGame {
 			e.printStackTrace();
 		}
 	}
-		
-
-	
-	
-
-	
-
-	
-
-
-
-
-
-	
-
 
 
 }

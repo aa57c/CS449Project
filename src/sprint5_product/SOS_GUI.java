@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 
 
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -20,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class SOS_GUI extends JFrame {
 	private ArrayList<String> fileContent = new ArrayList<String>();
 	private Canvas canvas;
 	private Board board;
+	private File file;
+	private String fileName;
+	private Boolean isFileCreated;
 	private FileWriter myWriter;
 
 	//Panel for top of game window (game options)
@@ -278,13 +283,32 @@ public class SOS_GUI extends JFrame {
 		}
 		
 	}
-	public void writeFile() {
+	public String createDate() {
 		LocalDateTime date = LocalDateTime.now();
-		DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		DateTimeFormatter date_format = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss");
 		String formatted_date = date.format(date_format);
+		return formatted_date;
+	}
+	public void createFile() {
+		this.fileName = createDate() + "_GameRecord.txt";
 		try {
-			myWriter = new FileWriter("GameRecord.txt", true);
-			myWriter.write(formatted_date + "\n");
+			this.file = new File("src/sprint5_product/GameRecords/", this.fileName);
+			if(this.file.createNewFile()) {
+				this.setIsFileCreated(true);
+				writeFile();	
+			}
+			else {
+				this.setIsFileCreated(false);
+				writeFile();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public void writeFile() {
+		try {
+			myWriter = new FileWriter(this.file, true);
 			for(String s : this.fileContent) {
 				myWriter.write(s + "\n");
 				System.out.println("writing to file");
@@ -292,9 +316,12 @@ public class SOS_GUI extends JFrame {
 			System.out.println("closed file");
 			myWriter.write("\n");
 			myWriter.close();
+			recordGame.setSelected(false);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 	public void recordSettings()
 	{
@@ -432,7 +459,6 @@ public class SOS_GUI extends JFrame {
 			}
 			
 		});
-		
 
 		
 		simple.setText("Simple Game");
@@ -694,9 +720,10 @@ public class SOS_GUI extends JFrame {
 		}
 		private void printStatusBar() {
 			if(board.getGameState() == GameState.SETUP) {
-				//System.out.println("In Setup Game");
+				//System.out.println("In Setup Game")
 				newGameButton.setEnabled(false);
 				recordGame.setEnabled(false);
+				
 				
 				gameStatusText.setForeground(Color.BLACK);
 				gameStatusText.setText("Select game mode, board size, and human/computer");
@@ -738,21 +765,21 @@ public class SOS_GUI extends JFrame {
 				gameStatusText.setForeground(Color.MAGENTA);
 				gameStatusText.setText("It's a Draw! Click to play again.");
 				recordResult(board.getGameState());
-				writeFile();
+				createFile();
 
 			}
 			else if(board.getGameState() == GameState.RED_WON) {
 				gameStatusText.setForeground(Color.RED);
 				gameStatusText.setText("Red Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				writeFile();
+				createFile();
 
 			}
 			else if(board.getGameState() == GameState.BLUE_WON) {
 				gameStatusText.setForeground(Color.BLUE);
 				gameStatusText.setText("Blue Player Won! Click to play again.");
 				recordResult(board.getGameState());
-				writeFile();
+				createFile();
 
 			}
 		}
@@ -765,6 +792,14 @@ public class SOS_GUI extends JFrame {
 				new SOS_GUI(new Board()); 
 			}
 		});
+	}
+
+	public Boolean getIsFileCreated() {
+		return isFileCreated;
+	}
+
+	public void setIsFileCreated(Boolean isFileCreated) {
+		this.isFileCreated = isFileCreated;
 	}
 
 
