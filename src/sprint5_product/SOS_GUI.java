@@ -308,13 +308,14 @@ public class SOS_GUI extends JFrame {
 	}
 	public void writeFile() {
 		try {
-			myWriter = new FileWriter(this.file, true);
+			myWriter = new FileWriter(this.file);
 			for(String s : this.fileContent) {
 				myWriter.write(s + "\n");
 				System.out.println("writing to file");
 			}
 			System.out.println("closed file");
 			myWriter.write("\n");
+			myWriter.flush();
 			myWriter.close();
 			recordGame.setSelected(false);
 		} catch (IOException e) {
