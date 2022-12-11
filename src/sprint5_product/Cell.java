@@ -16,7 +16,4 @@ public class Cell {
     }
     public Integer getSym()   { return sym; }
     public String getClr() { return clr; }
-
-
-
 }

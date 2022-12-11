@@ -314,7 +314,6 @@ public class SOS_GUI extends JFrame {
 				System.out.println("writing to file");
 			}
 			System.out.println("closed file");
-			myWriter.write("\n");
 			myWriter.flush();
 			myWriter.close();
 			recordGame.setSelected(false);
