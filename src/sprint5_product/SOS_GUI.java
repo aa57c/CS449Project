@@ -753,10 +753,6 @@ public class SOS_GUI extends JFrame {
 				Blue_O.setEnabled(false);
 
 			}
-			else if(board.getGameState() == GameState.REPLAY) {
-				gameStatusText.setForeground(Color.ORANGE);
-				gameStatusText.setText("Replaying Game");
-			}
 			else if(board.getGameState() == GameState.PLAYING) {
 				gameStatusText.setForeground(Color.BLACK);
 				updateTurns(board.getPlayerColor());

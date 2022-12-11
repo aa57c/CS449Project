@@ -1,7 +1,7 @@
 package sprint5_product;
 
 public class Board {
-	public enum GameState {SETUP, PLAYING, DRAW, RED_WON, BLUE_WON, REPLAY}
+	public enum GameState {SETUP, PLAYING, DRAW, RED_WON, BLUE_WON}
 	private String gameMode = "";
 	private GameState currentGameState;
 	private Cell[][] grid;
@@ -56,12 +56,7 @@ public class Board {
 	public int getBoardsize() {
 		return this.boardsize;
 	}
-	public void beginReplay(int size) {
-		this.boardsize = size;
-		this.grid = new Cell[size][size];
-		this.currentGameState = GameState.REPLAY;
-		InitializeGrid();
-	}
+	
 	public void beginSetup() {
 		this.currentGameState = GameState.SETUP;
 	}
