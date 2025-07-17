@@ -316,6 +316,7 @@ public class SOS_GUI extends JFrame {
 			System.out.println("closed file");
 			myWriter.flush();
 			myWriter.close();
+			this.fileContent.clear();
 			recordGame.setSelected(false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -427,6 +428,7 @@ public class SOS_GUI extends JFrame {
 				else if(general.isSelected()) {
 					board.setGameMode(general.getText());
 				}
+				this.fileContent.clear();
 				recordSettings();
 
 				
